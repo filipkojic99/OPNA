@@ -1,0 +1,151 @@
+package projekat1;
+
+import java.util.ArrayList;
+import java.lang.Math;
+
+public class Razlomak {
+
+	public int brojilac;
+	public int imenilac;
+
+	public double greska_prve_vrste;
+	public double greska_druge_vrste;
+
+	public ArrayList<Integer> verizne_decimale = new ArrayList<>();
+
+	public ArrayList<Integer> getVerizne_decimale() {
+		return verizne_decimale;
+	}
+
+	public void setVerizne_decimale(ArrayList<Integer> verizne_decimale) {
+		this.verizne_decimale = verizne_decimale;
+	}
+
+	public Razlomak(int brojilac, int imenilac) {
+		this.brojilac = brojilac;
+		this.imenilac = imenilac;
+	}
+
+	public int getBrojilac() {
+		return brojilac;
+	}
+
+	public void setBrojilac(int brojilac) {
+		this.brojilac = brojilac;
+	}
+
+	public int getImenilac() {
+		return imenilac;
+	}
+
+	public void setImenilac(int imenilac) {
+		this.imenilac = imenilac;
+	}
+
+	public double getGreska_prve_vrste() {
+		return greska_prve_vrste;
+	}
+
+	public void setGreska_prve_vrste(double greska_prve_vrste) {
+		this.greska_prve_vrste = greska_prve_vrste;
+	}
+
+	public double getGreska_druge_vrste() {
+		return greska_druge_vrste;
+	}
+
+	public void setGreska_druge_vrste(double greska_druge_vrste) {
+		this.greska_druge_vrste = greska_druge_vrste;
+	}
+
+	public void sracunaj_gresku_prve_vrste(double broj) {
+		double greska = ((double) ((double) broj) - (((double) this.brojilac) / ((double) this.imenilac)));
+		setGreska_prve_vrste(greska);
+	}
+
+	public void sracunaj_gresku_druge_vrste(double broj) {
+		double greska = ((double) (((double) ((double) this.imenilac) * ((double) broj)) - ((double) this.brojilac)));
+		setGreska_druge_vrste(greska);
+	}
+
+	public void sracunaj_greske(double broj) {
+		sracunaj_gresku_prve_vrste(broj);
+		sracunaj_gresku_druge_vrste(broj);
+	}
+
+	public String ispisiRazlomak() {
+		String razlomakFormatter = this.brojilac + "/" + this.imenilac;
+		return razlomakFormatter;
+	}
+
+	private void inicijalizacijaZaRacunanjeVeriznihDecimala(ArrayList<Double> x_niz, ArrayList<Double> a_niz,
+			ArrayList<Double> d_niz) {
+		double x0 = (double) this.brojilac / this.imenilac; // Ovde je mogao da se prosledi i zadati broj, alpha
+		// kao sto je radjeno u pdf-u
+		double a0 = Math.floor(new Double(x0));
+		double d0 = x0 - a0;
+		x_niz.add(x0);
+		a_niz.add(a0);
+		d_niz.add(d0);
+		verizne_decimale.add((int) a0);
+	}
+
+	private void sracunajVerizneDecimale(ArrayList<Double> x_niz, ArrayList<Double> a_niz, ArrayList<Double> d_niz) {
+		int it = 1;
+		while (d_niz.get(it - 1) > 0.00000001) {
+			double x_curr = (double) 1 / d_niz.get(it - 1);
+			x_niz.add(x_curr);
+			double a_curr = (double) Math.floor(x_curr);
+			a_niz.add(a_curr);
+			double d_curr = (double) x_curr - (double) a_curr;
+			d_niz.add(d_curr);
+			verizne_decimale.add((int) Math.round(a_curr));
+			it++;
+		}
+	}
+
+	private void azurirajPoslednjuVeriznuDecimalu(ArrayList<Double> a_niz) {
+		int brojDecimala = verizne_decimale.size();
+		if (verizne_decimale.get(brojDecimala - 1) == 1) {
+			if (brojDecimala > 1) {
+				int vrednostVD = verizne_decimale.get(brojDecimala - 2) + 1;
+				verizne_decimale.set(brojDecimala - 2, vrednostVD);
+				double vrednostA = a_niz.get(brojDecimala - 2) + 1;
+				a_niz.set(brojDecimala - 2, vrednostA);
+				verizne_decimale.remove(brojDecimala - 1);
+				a_niz.remove(brojDecimala - 1);
+			}
+		}
+	}
+
+	public void sracunaj_verizne_decimale() {
+		ArrayList<Double> x_niz = new ArrayList<>();
+		ArrayList<Double> a_niz = new ArrayList<>();
+		ArrayList<Double> d_niz = new ArrayList<>();
+
+		inicijalizacijaZaRacunanjeVeriznihDecimala(x_niz, a_niz, d_niz);
+		sracunajVerizneDecimale(x_niz, a_niz, d_niz);
+		azurirajPoslednjuVeriznuDecimalu(a_niz);
+	}
+
+	public String ispisiVerizneDecimale() {
+		String ispisString = "";
+		ispisString += "[";
+		for (int i = 0; i < verizne_decimale.size(); i++) {
+			ispisString += verizne_decimale.get(i);
+			if (i == 0) {
+				if (verizne_decimale.size() >= 2) {
+					ispisString += ";";
+				}
+			}
+			if (i != 0 || verizne_decimale.size() < 2) {
+				if (i != (verizne_decimale.size() - 1)) {
+					ispisString += ",";
+				}
+			}
+		}
+		ispisString += "]";
+		return ispisString;
+	}
+
+}

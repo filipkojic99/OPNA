@@ -1,0 +1,104 @@
+package prvi;
+
+import java.util.ArrayList;
+
+public class Razlomak {
+	
+	// brojilac i imenilac
+	public int p;
+	public int q;
+	
+	// tolerancija na gresku 
+	public static final double PRAG = 1e-8;
+	
+	// lista sa clanovima veriznog razvoja
+	public ArrayList<Integer> verizniRazvoj = new ArrayList<>();
+	
+	public Razlomak(int p, int q) {
+		this.p = p;
+		this.q = q;
+	}
+	
+	// odredjivanje veriznih decimala
+	public void odrediVerizneDecimale() {
+		// liste za algoritam sa pdf-a
+	    ArrayList<Double> nizX = new ArrayList<>();
+	    ArrayList<Double> nizA = new ArrayList<>();
+	    ArrayList<Double> nizD = new ArrayList<>();
+
+	    // postavljanje pocetnih vrednosti
+	    double x0 =  this.p * 1.0 / this.q;
+	    double a0 = Math.floor(x0);
+	    double d0 = x0 - a0;
+	    nizX.add(x0); nizA.add(a0); nizD.add(d0);
+	    verizniRazvoj.add((int)a0);
+
+	    // racunanje veriznih decimala
+	    int i = 0;
+	    do {
+	        double x = 1.0 / nizD.get(i);
+	        nizX.add(x);
+	        double a = Math.floor(x);
+	        nizA.add(a);
+	        double d = x - a;
+	        nizD.add(d);
+	        verizniRazvoj.add((int) Math.round(a));
+	        i++;
+	    } while (nizD.get(i) > PRAG);
+	    
+	    // Azuriranje poslednje verizne decimale
+	    int brojDecimala = verizniRazvoj.size();
+	    if (verizniRazvoj.get(brojDecimala - 1) == 1 && brojDecimala > 1) {
+	        int vrednostVD = verizniRazvoj.get(brojDecimala - 2) + 1;
+	        verizniRazvoj.set(brojDecimala - 2, vrednostVD);
+	        double vrednostA = nizA.get(brojDecimala - 2) + 1;
+	        nizA.set(brojDecimala - 2, vrednostA);
+	        verizniRazvoj.remove(brojDecimala - 1);
+	        nizA.remove(brojDecimala - 1);
+	    }
+	}
+
+	// ispis clanova veriznog razvoja
+	public String ispisiVerizniRazvoj() {
+	    StringBuilder ispisBuilder = new StringBuilder();
+	    ispisBuilder.append("[");
+
+	    for (int i = 0; i < verizniRazvoj.size(); i++) {
+	        if (i == 0) {
+	            ispisBuilder.append(verizniRazvoj.get(i));
+	            if (verizniRazvoj.size() > 1) {
+	                ispisBuilder.append(";");
+	            }
+	        } else {
+	            ispisBuilder.append(verizniRazvoj.get(i));
+	            if (i < (verizniRazvoj.size() - 1)) {
+	                ispisBuilder.append(",");
+	            }
+	        }
+	    }
+
+	    ispisBuilder.append("]");
+	    return ispisBuilder.toString();
+	}
+
+	
+	// ispis razlomka kao p/q
+	public String toString() {
+		return this.p + "/" + this.q;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static void main(String[] args) {
+		Razlomak r = new Razlomak(27,47);
+		r.odrediVerizneDecimale();
+		System.out.print(r.ispisiVerizniRazvoj());
+	}
+	
+}

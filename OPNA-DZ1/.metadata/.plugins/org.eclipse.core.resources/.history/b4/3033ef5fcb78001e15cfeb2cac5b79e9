@@ -1,0 +1,8 @@
+package prvi;
+
+public class Ispis {
+	public static void main(String[] args) {
+		System.out.print((double)22/7);
+		System.out.print((double)176/56);
+	}
+}

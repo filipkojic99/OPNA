@@ -1,0 +1,285 @@
+package projekat1;
+
+import java.util.ArrayList;
+
+public class Test {
+
+	public static ArrayList<Razlomak> sviRazlomci = new ArrayList<>();
+	public static ArrayList<Razlomak> sortiranoGreskaI = new ArrayList<>();
+	public static ArrayList<Razlomak> sortiranoGreskaII = new ArrayList<>();
+	public static ArrayList<Razlomak> aproksimacijePrveVrste = new ArrayList<>();
+	public static ArrayList<Razlomak> aproksimacijeDrugeVrste = new ArrayList<>();
+
+	public static ArrayList<Integer> verizne_decimale = new ArrayList<>();
+	public static ArrayList<Razlomak> konvergente = new ArrayList<>();
+
+	public static void formirajKonvergente(double broj, int n, int m) {
+		ArrayList<Double> x_niz = new ArrayList<>();
+		ArrayList<Double> a_niz = new ArrayList<>();
+		ArrayList<Double> d_niz = new ArrayList<>();
+		double x0 = (double) broj;
+		double a0 = Math.floor(new Double(x0));
+		double d0 = x0 - a0;
+		x_niz.add(x0);
+		a_niz.add(a0);
+		d_niz.add(d0);
+		verizne_decimale.add((int) Math.round(a0));
+		int it = 1;
+		while (d_niz.get(it - 1) > 0.00000001) {
+			/*if (d_niz.get(i - 1) <= 0.00000000000000000000000000000001) {
+				break;
+			}*/
+			double x_curr = (double) 1 / d_niz.get(it - 1);
+			x_niz.add(x_curr);
+			double a_curr = (double) Math.floor(x_curr);
+			a_niz.add(a_curr);
+			double d_curr = (double) x_curr - (double) a_curr;
+			d_niz.add(d_curr);
+			verizne_decimale.add((int) Math.round(a_curr));
+		}
+		int brojDecimala = verizne_decimale.size();
+		if (verizne_decimale.get(brojDecimala - 1) == 1) {
+			if (brojDecimala > 1) {
+				int vrednostVD = verizne_decimale.get(brojDecimala - 2) + 1;
+				verizne_decimale.set(brojDecimala - 2, vrednostVD);
+				double vrednostA = a_niz.get(brojDecimala - 2) + 1;
+				a_niz.set(brojDecimala - 2, vrednostA);
+				verizne_decimale.remove(brojDecimala - 1);
+				a_niz.remove(brojDecimala - 1);
+			}
+		}
+		String ispisString = "";
+		ispisString += "[";
+		for (int i = 0; i < verizne_decimale.size(); i++) {
+			ispisString += verizne_decimale.get(i);
+			if (i == 0) {
+				if (verizne_decimale.size() >= 2) {
+					ispisString += ";";
+				}
+			}
+			if (i != 0 || verizne_decimale.size() < 2) {
+				if (i != (verizne_decimale.size() - 1)) {
+					ispisString += ",";
+				}
+			}
+		}
+		ispisString += "]";
+		System.out.println("--------------");
+		System.out.println("Verizne decimale za zadati broj su: " + ispisString);
+
+		ArrayList<Integer> p_list = new ArrayList<>();
+		ArrayList<Integer> q_list = new ArrayList<>();
+
+		int p0 = verizne_decimale.get(0);
+		int q0 = 1;
+		p_list.add(p0);
+		q_list.add(q0);
+		konvergente.add(new Razlomak(p0, q0));
+		int p1 = verizne_decimale.get(0) * verizne_decimale.get(1) + 1;
+		int q1 = verizne_decimale.get(1);
+		p_list.add(p1);
+		q_list.add(q1);
+		konvergente.add(new Razlomak(p1, q1));
+		for (int k = 2; k < verizne_decimale.size(); k++) {
+			int p_curr = p_list.get(k - 1) * verizne_decimale.get(k) + p_list.get(k - 2);
+			int q_curr = q_list.get(k - 1) * verizne_decimale.get(k) + q_list.get(k - 2);
+			p_list.add(p_curr);
+			q_list.add(q_curr);
+			konvergente.add(new Razlomak(p_curr, q_curr));
+		}
+		System.out.println("---------------");
+		System.out.println("Konvergente su: ");
+		String ispis = "";
+		for (int i = 0; i < konvergente.size(); i++) {
+			ispis += konvergente.get(i).ispisiRazlomak() + "  ";
+		}
+		System.out.println(ispis);
+
+	}
+
+	public static void nadjiAprPrveIDrugeVrste(double broj) {
+		int brojRazlomaka = sviRazlomci.size();
+		for (int i = 0; i < brojRazlomaka; i++) {
+			Razlomak tekuci = sviRazlomci.get(i);
+			double vrednostLevo = Math
+					.abs((double) broj - (double) tekuci.getBrojilac() / (double) tekuci.getImenilac());
+			int j = i;
+			boolean lose = false;
+			while (j > 0) {
+				j--;
+				Razlomak drugi = sviRazlomci.get(j);
+				if (drugi.getImenilac() < tekuci.getImenilac()) {
+					double vrednostDesno = Math
+							.abs((double) broj - (double) drugi.getBrojilac() / (double) drugi.getImenilac());
+					if (vrednostLevo >= vrednostDesno) {
+						lose = true;
+						break;
+					}
+				}
+			}
+			if (lose == false) {
+				aproksimacijePrveVrste.add(tekuci);
+			}
+		}
+
+		for (int i = 0; i < brojRazlomaka; i++) {
+			Razlomak tekuci = sviRazlomci.get(i);
+			double vrednostLevo = Math
+					.abs((double) tekuci.getImenilac() * (double) broj - (double) tekuci.getBrojilac());
+			int j = i;
+			boolean lose = false;
+			while (j > 0) {
+				j--;
+				Razlomak drugi = sviRazlomci.get(j);
+				if (drugi.getImenilac() < tekuci.getImenilac()) {
+					double vrednostDesno = Math
+							.abs((double) drugi.getImenilac() * (double) broj - (double) drugi.getBrojilac());
+					if (vrednostLevo >= vrednostDesno) {
+						lose = true;
+						break;
+					}
+				}
+			}
+			if (lose == false) {
+				aproksimacijeDrugeVrste.add(tekuci);
+			}
+		}
+
+		// Ako zelimo da konvergente budu aproksimacije druge vrste, ovo odkomentarisati
+		///*
+		/*for (int l = 0; l < brojRazlomaka; l++) {
+			boolean treba = false;
+			if (!aproksimacijeDrugeVrste.contains(sviRazlomci.get(l))) {
+				for (int m = 0; m < konvergente.size(); m++) {
+					double val1 = (double) sviRazlomci.get(l).getBrojilac() / (double) sviRazlomci.get(l).getImenilac();
+					double val2 = (double) konvergente.get(m).getBrojilac() / (double) konvergente.get(m).getImenilac();
+					if (val1 == val2) {
+						treba = true;
+						break;
+					}
+				}
+				if (treba == true) {
+					aproksimacijeDrugeVrste.add(sviRazlomci.get(l));
+					aproksimacijePrveVrste.add(sviRazlomci.get(l));
+				}
+			}
+		}
+		//*/
+	}
+
+	public static void formirajRazlomak(double broj, int n, int m) {
+		for (int i = n; i < m + 1; i++) {
+			int imenilac_curr = i;
+			int brojilac_curr = (int) Math.round((double) broj * imenilac_curr);
+			Razlomak razlomak_curr = new Razlomak(brojilac_curr, imenilac_curr);
+			razlomak_curr.sracunaj_greske(broj);
+			razlomak_curr.sracunaj_verizne_decimale();
+			sviRazlomci.add(razlomak_curr);
+			sortiranoGreskaI.add(razlomak_curr);
+			sortiranoGreskaII.add(razlomak_curr);
+		}
+	}
+
+	public static void ispisDecimalaIGresaka() {
+		System.out.println("Nesortirani razlomci: ");
+		System.out.printf("%-15s %-20s %-25s %-20s", "RAZLOMAK", "VERIZNE DECIMALE", "ERROR TYPE I", "ERROR TYPE II");
+		System.out.println();
+		for (int i = 0; i < sviRazlomci.size(); i++) {
+			System.out.printf("%-15s %-20s %-25s %-20s", sviRazlomci.get(i).ispisiRazlomak(),
+					sviRazlomci.get(i).ispisiVerizneDecimale(),
+					String.valueOf(sviRazlomci.get(i).getGreska_prve_vrste()),
+					String.valueOf(sviRazlomci.get(i).getGreska_druge_vrste()));
+			System.out.println();
+		}
+	}
+
+	public static void konacanIspis() {
+		System.out.println("-----------------");
+		System.out.println("Konacan ispis razlomaka sortiran po aps. gresci: ");
+		System.out.printf("%-15s %-20s %-25s %-10s", "RAZLOMAK", "VERIZNE DECIMALE", "ERROR TYPE I", "TIP");
+		System.out.println();
+		for (int i = 0; i < sortiranoGreskaI.size(); i++) {
+			String tip = "";
+			if (aproksimacijeDrugeVrste.contains(sortiranoGreskaI.get(i))) {
+				tip = "II";
+			} else if (aproksimacijePrveVrste.contains(sortiranoGreskaI.get(i))) {
+				tip = "I";
+			} else {
+				tip = "N";
+			}
+			System.out.printf("%-15s %-20s %-25s %-5s", sortiranoGreskaI.get(i).ispisiRazlomak(),
+					sortiranoGreskaI.get(i).ispisiVerizneDecimale(),
+					String.valueOf(sortiranoGreskaI.get(i).getGreska_prve_vrste()), tip);
+			System.out.println();
+		}
+	}
+
+	public static void sortirajListuTipJedan(ArrayList<Razlomak> lista) {
+		lista.sort((o1, o2) -> {
+			double v1 = Math.abs(o1.getGreska_prve_vrste());
+			double v2 = Math.abs(o2.getGreska_prve_vrste());
+			if (v1 > v2) {
+				return 1;
+			} else if (v1 < v2) {
+				return -1;
+			} else {
+				return 0;
+			}
+		});
+	}
+
+	public static void sortirajListuTipDva(ArrayList<Razlomak> lista) {
+		lista.sort((o1, o2) -> {
+			double v1 = Math.abs(o1.getGreska_druge_vrste());
+			double v2 = Math.abs(o2.getGreska_druge_vrste());
+			if (v1 > v2) {
+				return 1;
+			} else if (v1 < v2) {
+				return -1;
+			} else {
+				return 0;
+			}
+		});
+	}
+
+	public static void ispisiListu(ArrayList<Razlomak> lista) {
+		System.out.printf("%-15s %-20s %-25s %-20s", "RAZLOMAK", "VERIZNE DECIMALE", "ERROR TYPE I", "ERROR TYPE II");
+		System.out.println();
+		for (int i = 0; i < lista.size(); i++) {
+			System.out.printf("%-15s %-20s %-25s %-25s", lista.get(i).ispisiRazlomak(),
+					lista.get(i).ispisiVerizneDecimale(), String.valueOf(lista.get(i).getGreska_prve_vrste()),
+					String.valueOf(lista.get(i).getGreska_druge_vrste()));
+			System.out.println();
+		}
+	}
+
+	public static void main(String[] args) {
+		double broj = 3.1415926;
+		int n = 1;
+		int m = 10;
+
+		formirajRazlomak(broj, n, m);
+		ispisDecimalaIGresaka();
+		sortirajListuTipJedan(sortiranoGreskaI);
+		sortirajListuTipDva(sortiranoGreskaII);
+		System.out.println("-----------");
+		System.out.println("Sortirano po abs. vrednosti greske prve vrste: ");
+		ispisiListu(sortiranoGreskaI);
+		System.out.println("-----------");
+		System.out.println("Sortirano po abs. vrednosti greske druge vrste: ");
+		ispisiListu(sortiranoGreskaII);
+		formirajKonvergente(broj, n, m);
+		nadjiAprPrveIDrugeVrste(broj);
+		sortirajListuTipJedan(aproksimacijePrveVrste);
+		sortirajListuTipDva(aproksimacijeDrugeVrste);
+		System.out.println("-----------");
+		System.out.println("Sortirane aproksimacije prve vrste: ");
+		ispisiListu(aproksimacijePrveVrste);
+		System.out.println("-----------");
+		System.out.println("Sortirane aproksimacije druge vrste: ");
+		ispisiListu(aproksimacijeDrugeVrste);
+
+		konacanIspis();
+	}
+
+}

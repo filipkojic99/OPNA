@@ -1,0 +1,4 @@
+INDEX VERSION 1.131+C:\Users\Korisnik\Desktop\OPNA\OPNA-DZ1\.metadata\.plugins\org.eclipse.jdt.core
+2872044937.index
+2388509813.index
+3866713339.index
