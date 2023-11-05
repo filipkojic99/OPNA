@@ -19,14 +19,11 @@ public class Razlomak {
     public ArrayList<Double> nizA;
     public ArrayList<Double> nizD;
     
-    // greske I i II vrste
 	public double greska_prve_vrste;
 	public double greska_druge_vrste;
 	
-	// tip razlomka - I, II ili N vrsta
 	public String tip;
 	
-	// konstruktor za kreiranje objekta razlomka
 	public Razlomak(long p, long q) {
 		this.p = p;
 		this.q = q;
@@ -70,7 +67,6 @@ public class Razlomak {
 	    }
 	}
 
-	// racunanje gresaka I i II vrste
 	public void izracunajGreske(double a) {
 		this.greska_prve_vrste = a - (this.p * 1.0 / this.q);
 		this.greska_druge_vrste = this.q * a - this.p;

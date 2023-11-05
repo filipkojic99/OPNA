@@ -27,7 +27,6 @@ public class Main {
 	
 	// konvergente broja a
 	public static ArrayList<Razlomak> konvergente = new ArrayList<>();
-	
 	// set sa konvergentama u vidu stringa
 	public static HashSet<String> setKonvergenti = new HashSet<>();
 	// set sa razlomcima prve vrste u vidu stringa
@@ -187,7 +186,6 @@ public class Main {
 		}
 	}
 	
-	// sortiranje i ispis svih vrsta aproksimacija
 	private static void sortirajIspisiAproksimacije() {
 		// sortiranje aproksimacija po rastucoj vrednosti odstupanja od a
 		Collections.sort(aprokcimacije1, (r1, r2) -> 
@@ -229,9 +227,9 @@ public class Main {
 			System.out.printf("%-10s %-25s %-35s", razlomak, razlomak.ispisiVerizniRazvoj(), razlomak.greska_prve_vrste);
 			System.out.println();
 		}
+		
 	}
 	
-	// sortiranje i ispis svih razlomaka
 	public static void sortirajIspisiRazlomke() {
 		// sortiranje razlomaka po rastucoj vrednosti odstupanja
 		Collections.sort(razlomci, (r1, r2) -> 

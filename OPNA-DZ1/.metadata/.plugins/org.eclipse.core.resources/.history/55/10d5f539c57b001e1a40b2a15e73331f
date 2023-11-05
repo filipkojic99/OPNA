@@ -231,7 +231,6 @@ public class Main {
 		}
 	}
 	
-	// sortiranje i ispis svih razlomaka
 	public static void sortirajIspisiRazlomke() {
 		// sortiranje razlomaka po rastucoj vrednosti odstupanja
 		Collections.sort(razlomci, (r1, r2) -> 
