@@ -37,7 +37,7 @@ def skratiKoeficijente(koeficijenti):
             skraceni_koeficijenti.append(float(koef_str_skracen))
     return skraceni_koeficijenti
 
-# ispisuje polinom u obliku koef*10^stepen[i]*x^stepen + ...
+# ispisuje polinom u obliku koef[i]*10^stepeni[i]*x^stepen + ...
 def ispisiPolinom(koeficijenti, skraceni_koeficijenti, stepeni):
     ispis = ""
     brojStepeni = len(koeficijenti) - 1
@@ -59,13 +59,16 @@ def ispisiPolinom(koeficijenti, skraceni_koeficijenti, stepeni):
     ispis = ispis.replace('+-', '-')
     return ispis
 
+# za zaokruzivanje koeficijenta na k decimala prema pravilima
 k = 2
-#Polinom = [mat.pi/1260 - 1/420, -mat.pi*mat.pi/1680 + mat.pi/840, -mat.pi/30 + 1/10,
-           #-mat.pi*mat.pi/60+mat.pi/30, mat.pi*2/3-2, 0, 0, 0, 0]
-polinom = [mat.pi*(2**0.5), 0, mat.pi - 2**0.5, 2*mat.pi, -(mat.pi**0.5)/mat.pi, 2*(mat.pi-(mat.pi**0.5)), 0, mat.pi/(mat.pi**0.5) - 1.7]
+
+# polinom sa koeficijentima kao clanovima niza
+polinom = [mat.pi, 0, 0, 0, 0, 2 * mat.sqrt(3), 3, -mat.sqrt(2) / mat.pi, 2, 0, mat.sqrt(5) - 1]
 print(polinom)
 
+# nizovi koeficijenta u prilagodjenom obliku
 koeficijenti = []
+# nizovi stepeni broja 10 koji ce se mnoziti sa koeficijentima
 stepeni = []
 
 koeficijenti, stepeni = urediKoeficijenteStepene(polinom)
@@ -73,9 +76,3 @@ koeficijenti_skraceni = skratiKoeficijente(koeficijenti)
 print("Koeficijenti nakon skracivanja su: " + str(koeficijenti_skraceni))
 print("Stepeni nakon skracivanja su: " + str(stepeni))
 print(ispisiPolinom(koeficijenti, koeficijenti_skraceni, stepeni))
-
-#koeficijenti = [1,0,-3,-1,3,3,-1,-3,0,1]
-#skraceni_koeficijenti = [1,0,-3,-1,3,3,-1,-3,0,1] # Ovo bi bili koeficijenti nakon skracivanja
-#stepeni = [0,0,0,0,0,0,0,0,0,0]  # Ovo bi bili stepeni za svaki koeficijent
-#print("Polinom P(x) nakon skracivanja: " + ispisiPolinom(koeficijenti, skraceni_koeficijenti, stepeni))
-

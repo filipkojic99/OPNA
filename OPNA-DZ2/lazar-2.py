@@ -49,7 +49,9 @@ def ispisiPolinomNakonSkracivanja():
 
 #Polinom = [mat.pi/1260 - 1/420, -mat.pi*mat.pi/1680 + mat.pi/840, -mat.pi/30 + 1/10,
            #-mat.pi*mat.pi/60+mat.pi/30, mat.pi*2/3-2, 0, 0, 0, 0]
-Polinom = [mat.pi*(2**0.5), 0, mat.pi - 2**0.5, 2*mat.pi, -(mat.pi**0.5)/mat.pi, 2*(mat.pi-(mat.pi**0.5)), 0, mat.pi/(mat.pi**0.5) - 1.7]
+#Polinom = [mat.pi*(2**0.5), 0, mat.pi - 2**0.5, 2*mat.pi, -(mat.pi**0.5)/mat.pi, 2*(mat.pi-(mat.pi**0.5)), 0, mat.pi/(mat.pi**0.5) - 1.7]
+
+Polinom = [mat.pi, 0, 0, 0, 0, 2 * mat.sqrt(3), 3, -mat.sqrt(2) / mat.pi, 2, 0, mat.sqrt(5) - 1]
 k = 2
 print(Polinom)
 

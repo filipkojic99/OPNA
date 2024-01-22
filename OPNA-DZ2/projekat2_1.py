@@ -57,8 +57,13 @@ def prebrojPromeneZnaka(rezultatiA, rezultatiB):
     return promenaZnakaA, promenaZnakaB
 
 x = s.symbols('x')
-polinom = x**9 - 3*x**7 - x**6 + 3*x**5 + 3*x**4 - x**3 - 3*x**2 + 1
-# polinom = 111/25*x**7+43/25*x**5+157/25*x**4-113/200*x**3+273/100*x**2+181/2500
+
+# polinom za testiranje
+polinom = 3.14 * x**10 + 3.46 * x**5 + 3.0 * x**4 - 4.51 * 10**-1 * x**3 + 2.0 * x**2 + 1.23
+
+# granice intervala [a, b]
+a = -1 ; b = 1;
+
 prviIzvod = nadjiPrviIzvod(polinom)
 
 print("P0(x) = " + ispisiPolinom(polinom))
@@ -75,9 +80,6 @@ print("********************************************************************")
 for i in range(len(sturm_niz)):
     print("P" + str(i) + "(x) = " + ispisiPolinom(sturm_niz[i]))
 
-# granice intervala [a, b]
-a = 0
-b = 3
 rezultatiA, rezultatiB = izracunajVrednostiPolinoma(a, b)
 print("********************************************************************")
 print("Vrednosti Šturmovih polinoma:")
